@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexron Bot - Terms of Service</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        :root {
+            --primary: #5865F2;
+            --primary-dark: #4752C4;
+            --secondary: #57F287;
+            --secondary-dark: #43B581;
+            --accent: #EB459E;
+            --danger: #ED4245;
+            --warning: #FEE75C;
+            --dark: #1e1f29;
+            --darker: #0f1016;
+            --darker-alt: #12131a;
+            --light: #f5f5f7;
+            --gray: #99aab5;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --glass: rgba(30, 31, 41, 0.7);
+            --glass-light: rgba(255, 255, 255, 0.05);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        body {
+            background: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(88, 101, 242, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(87, 242, 135, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(235, 69, 158, 0.05) 0%, transparent 50%);
+            z-index: -2;
+        }
+        
+        /* Welcome Screen */
+        #welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a0f 0%, #151522 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, transform 1s ease;
+            overflow: hidden;
+        }
+        
+        .welcome-container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+            max-width: 900px;
+            width: 90%;
+        }
+        
+        .logo-container {
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .bot-logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            box-shadow: 
+                0 0 0 15px rgba(88, 101, 242, 0.1),
+                0 0 50px rgba(88, 101, 242, 0.3);
+            animation: logoFloat 6s ease-in-out infinite;
+        }
+        
+        .bot-logo::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            background: linear-gradient(135deg, var(--primary), transparent 30%, var(--accent));
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.7;
+            filter: blur(15px);
+        }
+        
+        .bot-logo i {
+            font-size: 3.5rem;
+            color: white;
+        }
+        
+        /* Nexron Name Animation */
+        .nexron-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            position: relative;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .nexron-text {
+            background: linear-gradient(90deg, 
+                #FFFFFF 0%, 
+                var(--primary) 25%, 
+                #FFFFFF 50%, 
+                var(--secondary) 75%, 
+                #FFFFFF 100%);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 8s ease infinite;
+            text-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            letter-spacing: 2px;
+        }
+        
+        .nexron-text.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .welcome-subtitle {
+            font-size: 1.3rem;
+            color: var(--gray);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+            position: relative;
+            padding: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease 0.5s;
+        }
+        
+        .welcome-subtitle.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .welcome-subtitle::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+        
+        .welcome-subtitle::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--secondary), transparent);
+        }
+        
+        /* Loading Animation */
+        .loading-wrapper {
+            width: 100%;
+            max-width: 600px;
+            margin: 3rem auto;
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease 1s;
+        }
+        
+        .loading-wrapper.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .loading-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .loading-bar-container {
+            width: 100%;
+            height: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .loading-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, 
+                var(--primary) 0%, 
+                var(--secondary) 50%, 
+                var(--accent) 100%);
+            border-radius: 10px;
+            position: relative;
+            transition: width 0.3s ease;
+        }
+        
+        .loading-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent);
+            animation: loadingShine 2.5s infinite;
+            border-radius: 10px;
+        }
+        
+        .loading-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+        
+        .loading-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0.3;
+            animation: dotPulse 1.4s ease-in-out infinite;
+        }
+        
+        .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        .skip-hint {
+            margin-top: 2.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            opacity: 0.7;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease 1.5s;
+        }
+        
+        .skip-hint.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .skip-hint:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+        
+        .skip-hint i {
+            color: var(--warning);
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        
+        /* Header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding-top: 3rem;
+            position: relative;
+        }
+        
+        .header-content {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-light);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--primary), 
+                var(--secondary), 
+                var(--accent));
+        }
+        
+        .bot-name-display {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, 
+                #FFFFFF 0%, 
+                var(--primary) 25%, 
+                #FFFFFF 50%, 
+                var(--secondary) 75%, 
+                #FFFFFF 100%);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 8s ease infinite;
+            display: inline-block;
+            letter-spacing: 1px;
+        }
+        
+        .main-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .main-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--secondary), transparent);
+            border-radius: 3px;
+        }
+        
+        .date-display {
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .support-btn-container {
+            margin-top: 2rem;
+        }
+        
+        .support-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 4px 20px rgba(88, 101, 242, 0.3),
+                0 0 0 0 rgba(88, 101, 242, 0.5);
+            animation: buttonPulse 2s infinite;
+        }
+        
+        .support-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 
+                0 8px 30px rgba(88, 101, 242, 0.4),
+                0 0 0 10px rgba(88, 101, 242, 0);
+            animation: none;
+        }
+        
+        .support-btn i {
+            font-size: 1.3rem;
+        }
+        
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        /* Section Cards */
+        .section-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-light);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .section-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(88, 101, 242, 0.3);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.8rem;
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+        }
+        
+        .card-icon i {
+            font-size: 1.8rem;
+            color: white;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            color: white;
+            flex: 1;
+        }
+        
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-item {
+            padding: 0.9rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: var(--transition);
+        }
+        
+        .feature-item:hover {
+            padding-left: 10px;
+        }
+        
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-icon {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+            min-width: 20px;
+        }
+        
+        .feature-text {
+            flex: 1;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .warning {
+            color: var(--warning);
+            font-weight: 600;
+        }
+        
+        .danger {
+            color: var(--danger);
+            font-weight: 600;
+        }
+        
+        /* Data Privacy Highlight */
+        .data-privacy-container {
+            width: 100%;
+            margin: 3rem 0;
+            position: relative;
+        }
+        
+        .data-privacy-card {
+            background: linear-gradient(135deg, rgba(87, 242, 135, 0.1), rgba(88, 101, 242, 0.1));
+            border: 1px solid rgba(87, 242, 135, 0.2);
+            border-radius: 15px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+        }
+        
+        .data-privacy-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .privacy-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .privacy-title {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .privacy-subtitle {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+        
+        .privacy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .privacy-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .privacy-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+            background: rgba(87, 242, 135, 0.05);
+        }
+        
+        .privacy-icon {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .privacy-item-title {
+            font-size: 1.2rem;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .privacy-item-text {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+        
+        /* Confirmation Box */
+        .confirmation-container {
+            margin: 4rem 0;
+        }
+        
+        .confirmation-box {
+            background: linear-gradient(135deg, rgba(88, 101, 242, 0.1), rgba(235, 69, 158, 0.1));
+            border: 1px solid rgba(88, 101, 242, 0.2);
+            border-radius: 15px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+        }
+        
+        .confirmation-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+        
+        .confirmation-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .confirmation-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .confirmation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+        
+        .confirmation-item:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .confirmation-icon {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-top: 0.2rem;
+        }
+        
+        .confirmation-text {
+            flex: 1;
+            color: var(--light);
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        .main-footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-light);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .main-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .footer-link {
+            color: var(--gray);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .footer-link:hover {
+            color: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .copyright {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            opacity: 0.7;
+        }
+        
+        /* Animations */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes logoFloat {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg); 
+                box-shadow: 
+                    0 0 0 15px rgba(88, 101, 242, 0.1),
+                    0 0 50px rgba(88, 101, 242, 0.3);
+            }
+            50% { 
+                transform: translateY(-20px) rotate(5deg); 
+                box-shadow: 
+                    0 0 0 20px rgba(88, 101, 242, 0.2),
+                    0 0 80px rgba(88, 101, 242, 0.4);
+            }
+        }
+        
+        @keyframes loadingShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        @keyframes dotPulse {
+            0%, 100% { 
+                transform: scale(1); 
+                opacity: 0.3; 
+            }
+            50% { 
+                transform: scale(1.2); 
+                opacity: 1; 
+            }
+        }
+        
+        @keyframes buttonPulse {
+            0% { box-shadow: 
+                0 4px 20px rgba(88, 101, 242, 0.3),
+                0 0 0 0 rgba(88, 101, 242, 0.5); 
+            }
+            70% { box-shadow: 
+                0 4px 20px rgba(88, 101, 242, 0.3),
+                0 0 0 15px rgba(88, 101, 242, 0); 
+            }
+            100% { box-shadow: 
+                0 4px 20px rgba(88, 101, 242, 0.3),
+                0 0 0 0 rgba(88, 101, 242, 0); 
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(20px, 20px);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .content-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nexron-title {
+                font-size: 3.5rem;
+                height: 100px;
+            }
+            
+            .bot-name-display {
+                font-size: 2.8rem;
+            }
+            
+            .main-title {
+                font-size: 2.2rem;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-card {
+                padding: 2rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .bot-logo {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .bot-logo i {
+                font-size: 2.8rem;
+            }
+            
+            .privacy-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .confirmation-list {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .nexron-title {
+                font-size: 2.5rem;
+                height: 80px;
+            }
+            
+            .bot-name-display {
+                font-size: 2.2rem;
+            }
+            
+            .welcome-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .main-title {
+                font-size: 1.8rem;
+            }
+            
+            .support-btn {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+            
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+            }
+            
+            .card-icon {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .card-icon i {
+                font-size: 1.5rem;
+            }
+            
+            .data-privacy-card,
+            .confirmation-box {
+                padding: 1.5rem;
+            }
+            
+            .privacy-title,
+            .confirmation-title {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Utility Classes */
+        .fade-in {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        
+        /* Hide scrollbar during welcome */
+        body.welcome-active {
+            overflow: hidden;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--primary), var(--secondary));
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(var(--primary-dark), var(--secondary-dark));
+        }
+    </style>
+</head>
+<body class="welcome-active">
+    <!-- Welcome Screen -->
+    <div id="welcome-screen">
+        <div class="welcome-container">
+            <div class="logo-container">
+                <div class="bot-logo">
+                    <i class="fas fa-robot"></i>
+                </div>
+            </div>
+            
+            <div class="nexron-title">
+                <div class="nexron-text" id="nexron-text">NEXRON</div>
+            </div>
+            
+            <p class="welcome-subtitle" id="welcome-subtitle">
+                Our Terms of Service
+            </p>
+            
+            <div class="loading-wrapper" id="loading-wrapper">
+                <div class="loading-label">
+                    <span>Loading Terms & Conditions</span>
+                    <span id="progress-text">0%</span>
+                </div>
+                <div class="loading-bar-container">
+                    <div class="loading-bar" id="loading-bar"></div>
+                </div>
+                
+                <div class="loading-dots">
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                </div>
+            </div>
+            
+            <div class="skip-hint" id="skip-hint">
+                <i class="fas fa-keyboard"></i>
+                <span>Press <kbd>ESC</kbd> or click anywhere to skip</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container" id="main-content">
+        <header class="main-header">
+            <div class="header-content">
+                <h1 class="main-title">Nexron Terms of Service</h1>
+                
+                <div class="date-display">
+                    <i class="far fa-calendar-alt"></i>
+                    <span>Last Updated: <strong id="current-date"></strong></span>
+                </div>
+                
+                <p style="color: var(--gray); max-width: 700px; margin: 0 auto 1.5rem; line-height: 1.6;">
+                    By inviting, using, or interacting with <span class="highlight">Nexron Discord Bot</span>, 
+                    you agree to be bound by these Terms of Service (ToS). If you do not agree, you must cease using the Bot immediately.
+                </p>
+                
+                <div class="support-btn-container">
+                    <a href="https://discord.gg/JtWEPGuTPm" target="_blank" class="support-btn">
+                        <i class="fab fa-discord"></i>
+                        Join Support Server
+                    </a>
+                </div>
+            </div>
+        </header>
+        
+        <div class="content-grid">
+            <!-- Section 1 -->
+            <section class="section-card fade-in">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-file-signature"></i>
+                    </div>
+                    <h2 class="card-title">Acceptance of Terms</h2>
+                </div>
+                
+                <div class="card-content">
+                    <p>By using Nexron bot, you acknowledge and agree to the following:</p>
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <i class="fas fa-check-circle feature-icon"></i>
+                            <span class="feature-text">You have read and understood these terms</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-check-circle feature-icon"></i>
+                            <span class="feature-text">You agree to comply with all provisions</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-check-circle feature-icon"></i>
+                            <span class="feature-text">Continued use implies acceptance of updates</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-exclamation-triangle feature-icon warning"></i>
+                            <span class="feature-text">Violation may result in service termination</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Section 2 -->
+            <section class="section-card fade-in delay-1">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h2 class="card-title">Nexron Bot Features</h2>
+                </div>
+                
+                <div class="card-content">
+                    <p>Nexron provides comprehensive moderation and utility features:</p>
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <i class="fas fa-shield-alt feature-icon"></i>
+                            <span class="feature-text"><span class="highlight">Moderation Tools:</span> Kick, ban, mute, warn, purge</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-gamepad feature-icon"></i>
+                            <span class="feature-text"><span class="highlight">Fun Features:</span> Games and entertainment commands</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-ticket-alt feature-icon"></i>
+                            <span class="feature-text"><span class="highlight">Ticket System:</span> User support management</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-gift feature-icon"></i>
+                            <span class="feature-text"><span class="highlight">Giveaway System:</span> Customizable giveaways</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-clipboard-list feature-icon"></i>
+                            <span class="feature-text"><span class="highlight">Detailed Logging:</span> Comprehensive event tracking</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-user-check feature-icon"></i>
+                            <span class="feature-text"><span class="highlight">Verification System:</span> New member screening</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-hdd feature-icon"></i>
+                            <span class="feature-text"><span class="highlight">Backup/Restore:</span> Raid protection & recovery</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Section 3 -->
+            <section class="section-card fade-in delay-2">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h2 class="card-title">Data Collection & Privacy</h2>
+                </div>
+                
+                <div class="card-content">
+                    <p>Nexron collects minimal data and ensures privacy:</p>
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <i class="fas fa-id-card feature-icon"></i>
+                            <span class="feature-text"><span class="highlight">User IDs:</span> For moderation and tracking purposes</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-hashtag feature-icon"></i>
+                            <span class="feature-text"><span class="highlight">Channel IDs:</span> For ticket system and logging</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-server feature-icon"></i>
+                            <span class="feature-text"><span class="highlight">Guild IDs:</span> For server-specific configurations</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-folder feature-icon"></i>
+                            <span class="feature-text"><span class="highlight">Category IDs:</span> For ticket categories and organization</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-trash-alt feature-icon danger"></i>
+                            <span class="feature-text"><span class="danger">NO PERSONAL DATA:</span> We never collect personal information</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-sync feature-icon warning"></i>
+                            <span class="feature-text"><span class="warning">Auto-deletion:</span> Ticket content deleted after logging</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+        
+        <div class="content-grid">
+            <!-- Section 4 -->
+            <section class="section-card fade-in delay-4">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h2 class="card-title">Proper Usage & Requirements</h2>
+                </div>
+                
+                <div class="card-content">
+                    <p>To ensure proper usage of Nexron bot:</p>
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <i class="fas fa-check feature-icon"></i>
+                            <span class="feature-text">Use only in servers you own or administrate</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-ban feature-icon danger"></i>
+                            <span class="feature-text">Do not violate Discord's Terms of Service</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-lock feature-icon"></i>
+                            <span class="feature-text">Do not attempt to reverse-engineer or exploit</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-key feature-icon"></i>
+                            <span class="feature-text">Grant permissions responsibly and verify ownership</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-exclamation-triangle feature-icon warning"></i>
+                            <span class="feature-text">Report bugs to support server only</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Section 5 -->
+            <section class="section-card fade-in delay-5">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h2 class="card-title">User Responsibilities</h2>
+                </div>
+                
+                <div class="card-content">
+                    <p>You are responsible for bot usage in your server:</p>
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <i class="fas fa-exclamation-triangle feature-icon warning"></i>
+                            <span class="feature-text">Misuse of moderation tools is your responsibility</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-gavel feature-icon warning"></i>
+                            <span class="feature-text">Giveaways must comply with local laws</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-user-slash feature-icon danger"></i>
+                            <span class="feature-text">No illegal discrimination via verification</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-database feature-icon"></i>
+                            <span class="feature-text">Maintain independent backups</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-shield-alt feature-icon"></i>
+                            <span class="feature-text">Secure your server and bot permissions</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Section 6 -->
+            <section class="section-card fade-in delay-1">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h2 class="card-title">Limitations & Disclaimers</h2>
+                </div>
+                
+                <div class="card-content">
+                    <p><strong class="warning">NEXRON IS PROVIDED "AS IS" WITHOUT WARRANTIES</strong></p>
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <i class="fas fa-times-circle feature-icon danger"></i>
+                            <span class="feature-text">No liability for damages from usage</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-bug feature-icon warning"></i>
+                            <span class="feature-text">Potential downtime, bugs, or disruptions</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-exchange-alt feature-icon"></i>
+                            <span class="feature-text">Features may change without notice</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-hdd feature-icon warning"></i>
+                            <span class="feature-text">Backup doesn't guarantee full recovery</span>
+                        </li>
+                        <li class="feature-item">
+                            <i class="fas fa-ban feature-icon danger"></i>
+                            <span class="feature-text">Right to blacklist abusive servers</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Data Privacy Section -->
+        <div class="data-privacy-container fade-in">
+            <div class="data-privacy-card">
+                <div class="privacy-header">
+                    <h2 class="privacy-title">
+                        <i class="fas fa-shield-alt"></i>
+                        Important: Data Privacy & Ownership Verification
+                    </h2>
+                    <p class="privacy-subtitle">Nexron's commitment to privacy and security</p>
+                </div>
+                
+                <div class="privacy-grid">
+                    <div class="privacy-item">
+                        <div class="privacy-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3 class="privacy-item-title">Minimal Data Storage</h3>
+                        <p class="privacy-item-text">Nexron only stores essential IDs: User IDs, Channel IDs, Guild IDs, and Category IDs. No personal information is ever collected.</p>
+                    </div>
+                    
+                    <div class="privacy-item">
+                        <div class="privacy-icon">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                        <h3 class="privacy-item-title">Auto-Deletion</h3>
+                        <p class="privacy-item-text">All ticket content is automatically deleted after sending logs. Only essential metadata is retained temporarily.</p>
+                    </div>
+                    
+                    <div class="privacy-item">
+                        <div class="privacy-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h3 class="privacy-item-title">Ownership Verification</h3>
+                        <p class="privacy-item-text">We verify that users configuring the bot are actual server owners/admins to prevent unauthorized access.</p>
+                    </div>
+                    
+                    <div class="privacy-item">
+                        <div class="privacy-icon">
+                            <i class="fas fa-ban"></i>
+                        </div>
+                        <h3 class="privacy-item-title">No Personal Data</h3>
+                        <p class="privacy-item-text">We do not collect, store, or process any personal information beyond Discord IDs. Your privacy is protected.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- User Confirmation Section -->
+        <div class="confirmation-container fade-in delay-3">
+            <div class="confirmation-box">
+                <h2 class="confirmation-title">
+                    <i class="fas fa-check-circle"></i>
+                    By using Nexron Bot, you confirm:
+                </h2>
+                
+                <div class="confirmation-list">
+                    <div class="confirmation-item">
+                        <i class="fas fa-user-check confirmation-icon"></i>
+                        <p class="confirmation-text">You are at least 13 years old (Discord's minimum age)</p>
+                    </div>
+                    
+                    <div class="confirmation-item">
+                        <i class="fas fa-file-alt confirmation-icon"></i>
+                        <p class="confirmation-text">You have read and understood these terms</p>
+                    </div>
+                    
+                    <div class="confirmation-item">
+                        <i class="fas fa-handshake confirmation-icon"></i>
+                        <p class="confirmation-text">You agree to comply with these terms</p>
+                    </div>
+
+                    <div class="confirmation-item">
+                        <i class="fas fa-handshake confirmation-icon"></i>
+                        <p class="confirmation-text">You agree to comply with discord terms</p>
+                    </div>
+
+                    <div class="confirmation-item">
+                        <i class="fas fa-calendar-alt confirmation-icon"></i>
+                        <p class="confirmation-text">You accept future updates to these terms</p>
+                    </div>
+                    
+                    <div class="confirmation-item">
+                        <i class="fas fa-shield-alt confirmation-icon"></i>
+                        <p class="confirmation-text">You understand our data privacy practices</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+         
+        <footer class="main-footer">
+            <h3 style="margin-bottom: 1.5rem; color: white;">Contact & Information</h3>
+            
+            <div class="footer-links">
+                <a href="https://discord.gg/JtWEPGuTPm" target="_blank" class="footer-link">
+                    <i class="fab fa-discord"></i>
+                    Support Server
+                </a>
+                <a href="https://nexrondev.github.io/nexron-privacy/" target="_blank" class="footer-link">
+                    <i class="fas fa-shield-alt"></i>
+                    Privacy Policy
+                </a>
+                <a href="#" class="footer-link" onclick="return showTermsUpdate()">
+                    <i class="fas fa-sync"></i>
+                    Terms Updates
+                </a>
+            </div>
+            
+            <p style="color: var(--gray); margin-top: 2rem; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+                These Terms of Service may be updated periodically. Continued use of Nexron Bot constitutes acceptance of updated terms. 
+                For questions or violations, contact us through the official support server.
+            </p>
+            
+            <div class="copyright">
+                <p>© <span id="current-year"></span> Nexron Discord Bot Terms of Service. All rights reserved.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.8rem;">Nexron Features: Moderation • Fun • Tickets • Giveaways • Logging • Verification • Backup</p>
+                <p style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--secondary);">
+                    <i class="fas fa-shield-alt"></i> Privacy First: Only essential IDs stored • logs content are auto-deleted • No personal data collected
+                </p>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current date and year
+            const currentDate = new Date();
+            const formattedDate = currentDate.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            document.getElementById('current-date').textContent = formattedDate;
+            document.getElementById('current-year').textContent = currentDate.getFullYear();
+            
+            // Welcome screen elements
+            const welcomeScreen = document.getElementById('welcome-screen');
+            const mainContent = document.getElementById('main-content');
+            const loadingBar = document.getElementById('loading-bar');
+            const progressText = document.getElementById('progress-text');
+            const skipHint = document.getElementById('skip-hint');
+            const nexronText = document.getElementById('nexron-text');
+            const welcomeSubtitle = document.getElementById('welcome-subtitle');
+            const loadingWrapper = document.getElementById('loading-wrapper');
+            const body = document.body;
+            
+            let progress = 0;
+            const targetProgress = 100;
+            const loadingSpeed = 25;
+            let loadingInterval = null;
+            
+            // Start animation sequence
+            startWelcomeAnimation();
+            
+            // Welcome animation sequence
+            function startWelcomeAnimation() {
+                if (!nexronText) return;
+                
+                // Step 1: Show Nexron text with animation
+                setTimeout(() => {
+                    nexronText.classList.add('visible');
+                    
+                    // Step 2: Show subtitle after delay
+                    setTimeout(() => {
+                        if (welcomeSubtitle) {
+                            welcomeSubtitle.classList.add('visible');
+                        }
+                        
+                        // Step 3: Show loading wrapper after delay
+                        setTimeout(() => {
+                            if (loadingWrapper) {
+                                loadingWrapper.classList.add('visible');
+                            }
+                            
+                            // Step 4: Show skip hint after delay
+                            setTimeout(() => {
+                                if (skipHint) {
+                                    skipHint.classList.add('visible');
+                                }
+                                
+                                // Step 5: Start loading simulation
+                                startLoadingSimulation();
+                                
+                            }, 500); // Skip hint delay
+                            
+                        }, 500); // Loading wrapper delay
+                        
+                    }, 800); // Subtitle delay
+                    
+                }, 300); // Initial delay
+            }
+            
+            // Loading simulation
+            function startLoadingSimulation() {
+                if (loadingInterval) clearInterval(loadingInterval);
+                
+                loadingInterval = setInterval(() => {
+                    if (progress < targetProgress) {
+                        // Dynamic increment for realistic loading
+                        let increment;
+                        if (progress < 30) {
+                            increment = Math.random() * 3 + 1.5;
+                        } else if (progress < 70) {
+                            increment = Math.random() * 2 + 0.8;
+                        } else if (progress < 95) {
+                            increment = Math.random() * 1 + 0.3;
+                        } else {
+                            increment = Math.random() * 0.5 + 0.1;
+                        }
+                        
+                        progress += increment;
+                        if (progress > 100) progress = 100;
+                        
+                        if (loadingBar) {
+                            loadingBar.style.width = `${progress}%`;
+                        }
+                        if (progressText) {
+                            progressText.textContent = `${Math.floor(progress)}%`;
+                        }
+                        
+                        // Complete loading at 100%
+                        if (progress >= 100) {
+                            clearInterval(loadingInterval);
+                            setTimeout(showContent, 500);
+                        }
+                    }
+                }, loadingSpeed);
+            }
+            
+            // Show main content
+            function showContent() {
+                // Fade out welcome screen
+                welcomeScreen.style.opacity = '0';
+                welcomeScreen.style.transform = 'scale(1.1) translateY(-20px)';
+                welcomeScreen.style.pointerEvents = 'none';
+                
+                setTimeout(() => {
+                    welcomeScreen.style.display = 'none';
+                    body.classList.remove('welcome-active');
+                    
+                    // Show main content with animation
+                    mainContent.style.opacity = '1';
+                    mainContent.style.transform = 'translateY(0)';
+                    
+                    // Animate cards on scroll
+                    animateCards();
+                    
+                }, 800);
+            }
+            
+            // Skip welcome screen
+            function skipWelcome() {
+                if (loadingInterval) clearInterval(loadingInterval);
+                progress = 100;
+                if (loadingBar) {
+                    loadingBar.style.width = '100%';
+                    loadingBar.style.transition = 'width 0.5s ease';
+                }
+                if (progressText) {
+                    progressText.textContent = '100%';
+                }
+                showContent();
+            }
+            
+            // Animate cards on scroll
+            function animateCards() {
+                const cards = document.querySelectorAll('.section-card, .data-privacy-container, .confirmation-container');
+                
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                entry.target.classList.add('fade-in');
+                                observer.unobserve(entry.target);
+                            }, 100);
+                        }
+                    });
+                }, { 
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                });
+                
+                cards.forEach(card => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px)';
+                    card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                    observer.observe(card);
+                });
+            }
+            
+            // Event listeners
+            if (skipHint) {
+                skipHint.addEventListener('click', skipWelcome);
+            }
+            
+            if (welcomeScreen) {
+                welcomeScreen.addEventListener('click', skipWelcome);
+            }
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' || e.key === ' ' || e.key === 'Spacebar') {
+                    e.preventDefault();
+                    skipWelcome();
+                }
+            });
+            
+            // Hover effects
+            const interactiveElements = document.querySelectorAll('.feature-item, .support-btn, .footer-link, .section-card, .privacy-item, .confirmation-item');
+            
+            interactiveElements.forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    if (this.classList.contains('support-btn')) {
+                        this.style.transform = 'translateY(-3px) scale(1.05)';
+                    } else if (!this.classList.contains('section-card')) {
+                        this.style.transform = 'translateY(-2px)';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    if (this.classList.contains('support-btn')) {
+                        this.style.transform = 'translateY(0) scale(1)';
+                    } else if (!this.classList.contains('section-card')) {
+                        this.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+            
+            // Utility functions
+            window.showDataPrivacy = function() {
+                alert("NEXRON DATA PRIVACY POLICY:\n\n1. We ONLY store: User IDs, Channel IDs, Guild IDs, Category IDs\n2. Logs are AUTO-DELETED after sending them\n3. We verify server ownership before configuration\n4. NO personal data is collected or stored\n\nFor full details, visit: https://nexrondev.github.io/nexron-privacy/");
+                return false;
+            };
+            
+            window.showTermsUpdate = function() {
+                alert("These Terms of Service may be updated periodically. We recommend checking back occasionally for updates. Continued use of Nexron Bot constitutes acceptance of updated terms.");
+                return false;
+            };
+            
+            // Handle page visibility
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden && loadingInterval) {
+                    clearInterval(loadingInterval);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
